@@ -1,0 +1,98 @@
+<!-- prikaz modala preko servisa -->
+<div *ngIf="modalService.isModalOpen('auth-modal')"
+     class="fixed inset-0 z-50 overflow-y-auto">
+  <!-- overlay -->
+  <div class="fixed inset-0 bg-black/60" (click)="close()"></div>
+
+  <!-- modal centriran -->
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="relative w-full max-w-lg rounded-lg bg-secondary shadow-xl">
+
+      <!-- header -->
+      <div class="flex justify-between items-center p-6">
+        <h2 class="text-2xl font-bold">Your Account</h2>
+        <button (click)="close()" class="text-2xl leading-none">&times;</button>
+      </div>
+
+      <!-- tabovi -->
+      <ul class="flex border-b border-indigo-400 px-6 -mt-4">
+        <li class="flex-1 text-center">
+          <button (click)="selectTab('login')"
+                  [class.bg-indigo-400]="activeTab==='login'"
+                  [class.text-white]="activeTab==='login'"
+                  class="w-full py-3 rounded-t-md hover:text-white">
+            Login
+          </button>
+        </li>
+        <li class="flex-1 text-center">
+          <button (click)="selectTab('register')"
+                  [class.bg-indigo-400]="activeTab==='register'"
+                  [class.text-white]="activeTab==='register'"
+                  class="w-full py-3 rounded-t-md hover:text-white">
+            Register
+          </button>
+        </li>
+      </ul>
+
+      <!-- sadržaj -->
+      <div class="p-6 space-y-4">
+
+        <!-- LOGIN -->
+        <form *ngIf="activeTab==='login'"
+              [formGroup]="loginForm"
+              (ngSubmit)="submitLogin()"
+              class="space-y-4">
+          <input formControlName="email"
+                 type="email"
+                 placeholder="Email"
+                 class="w-full rounded-md border p-2"
+                 [class.border-red-500]="loginForm.get('email')?.invalid && loginForm.touched">
+          
+          <input formControlName="password"
+                 type="password"
+                 placeholder="Password"
+                 class="w-full rounded-md border p-2"
+                 [class.border-red-500]="loginForm.get('password')?.invalid && loginForm.touched">
+
+          <button type="submit"
+                  class="w-full rounded-md bg-indigo-400 py-2 text-white
+                         hover:bg-indigo-500 disabled:opacity-40"
+                  [disabled]="loginForm.invalid">
+            Submit
+          </button>
+        </form>
+
+        <!-- REGISTER -->
+        <form *ngIf="activeTab==='register'"
+              [formGroup]="registerForm"
+              (ngSubmit)="submitRegister()"
+              class="space-y-4">
+          
+          <input formControlName="name"     type="text"     placeholder="Name"
+                 class="w-full rounded-md border p-2"
+                 [class.border-red-500]="registerForm.get('name')?.invalid && registerForm.touched">
+          <input formControlName="email"    type="email"    placeholder="Email"
+                 class="w-full rounded-md border p-2"
+                 [class.border-red-500]="registerForm.get('email')?.invalid && registerForm.touched">
+          <input formControlName="age"      type="number"   placeholder="Age"
+                 class="w-full rounded-md border p-2">
+          <input formControlName="phone"    type="text"     placeholder="Phone Number"
+                 class="w-full rounded-md border p-2">
+          <input formControlName="password" type="password" placeholder="Password"
+                 class="w-full rounded-md border p-2">
+          <input formControlName="confirm"  type="password" placeholder="Confirm Password"
+                 class="w-full rounded-md border p-2"
+                 [class.border-red-500]="registerForm.errors?.['mismatch'] && registerForm.touched">
+
+          <button type="submit"
+                  class="w-full rounded-md bg-indigo-400 py-2 text-white
+                         hover:bg-indigo-500 disabled:opacity-40"
+                  [disabled]="registerForm.invalid">
+            Submit
+          </button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
